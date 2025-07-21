@@ -1,4 +1,3 @@
-```markdown
 # Fraud Detection Project  
 ## 10 Academy – AI Mastery Week 8 & 9 Challenge
 
