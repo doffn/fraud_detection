@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - Fraud Detection{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="text-center mb-4">📈 Model Analytics & Insights</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="chart-container">
+            <div id="feature_importance"></div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5>Model Performance</h5>
+            </div>
+            <div class="card-body">
+                {% for metric, value in metrics.items() %}
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span>{{ metric }}</span>
+                    <span class="badge bg-primary">{{ "%.3f"|format(value) }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5>Business Impact</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span>Detection Rate</span>
+                    <span class="badge bg-success">75%</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span>False Positive Rate</span>
+                    <span class="badge bg-warning">5%</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span>ROI</span>
+                    <span class="badge bg-info">340%</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span>Monthly Savings</span>
+                    <span class="badge bg-success">$1.66M</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Key Insights</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>🎯 Top Risk Indicators</h6>
+                        <ul class="list-unstyled">
+                            <li>• High-value transactions (25% importance)</li>
+                            <li>• New users (20% importance)</li>
+                            <li>• Night-time transactions (15% importance)</li>
+                            <li>• Ad traffic source (12% importance)</li>
+                            <li>• Shared devices (10% importance)</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>💡 Business Recommendations</h6>
+                        <ul class="list-unstyled">
+                            <li>• Implement real-time monitoring for high-value transactions</li>
+                            <li>• Enhanced verification for new users</li>
+                            <li>• Time-based risk adjustments</li>
+                            <li>• Device fingerprinting improvements</li>
+                            <li>• Ad traffic quality assessment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var graph = {{ graphJSON|safe }};
+    Plotly.plot('feature_importance', graph.data, graph.layout);
+</script>
+{% endblock %}

@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Test Model - Fraud Detection{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="text-center mb-4">⚡ Test Fraud Detection Model</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Transaction Details</h5>
+            </div>
+            <div class="card-body">
+                <form id="fraudForm">
+                    <div class="mb-3">
+                        <label class="form-label">Purchase Value ($)</label>
+                        <input type="number" class="form-control" id="purchase_value" value="100" min="0" step="0.01">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">User Age</label>
+                        <input type="number" class="form-control" id="age" value="35" min="18" max="80">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Transaction Hour (0-23)</label>
+                        <input type="number" class="form-control" id="hour" value="12" min="0" max="23">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Hours Since Signup</label>
+                        <input type="number" class="form-control" id="time_since_signup" value="168" min="0">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Country</label>
+                        <select class="form-select" id="country">
+                            <option value="USA">USA</option>
+                            <option value="Canada">Canada</option>
+                            <option value="UK">UK</option>
+                            <option value="Germany">Germany</option>
+                            <option value="France">France</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Traffic Source</label>
+                        <select class="form-select" id="source">
+                            <option value="SEO">SEO</option>
+                            <option value="Ads">Ads</option>
+                            <option value="Direct">Direct</option>
+                            <option value="Social">Social</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Risk Factors</h6>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="is_high_value">
+                            <label class="form-check-label" for="is_high_value">High Value Transaction</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="is_new_user">
+                            <label class="form-check-label" for="is_new_user">New User (&lt; 1 hour)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="is_night">
+                            <label class="form-check-label" for="is_night">Night Transaction</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="is_ad_source">
+                            <label class="form-check-label" for="is_ad_source">Ad Traffic Source</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="is_shared_device">
+                            <label class="form-check-label" for="is_shared_device">Shared Device</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="is_young_user">
+                            <label class="form-check-label" for="is_young_user">Young User (&lt; 25)</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">Calculate Risk Score</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Risk Assessment Results</h5>
+            </div>
+            <div class="card-body">
+                <div id="results" style="display: none;">
+                    <div class="row text-center mb-4">
+                        <div class="col-4">
+                            <h3 id="risk_score" class="text-primary">-</h3>
+                            <p class="mb-0">Risk Score</p>
+                        </div>
+                        <div class="col-4">
+                            <h3 id="risk_level">-</h3>
+                            <p class="mb-0">Risk Level</p>
+                        </div>
+                        <div class="col-4">
+                            <h3 id="recommendation" class="text-info">-</h3>
+                            <p class="mb-0">Recommendation</p>
+                        </div>
+                    </div>
+                    
+                    <div id="factors_section" style="display: none;">
+                        <h6>Contributing Risk Factors:</h6>
+                        <div id="risk_factors"></div>
+                    </div>
+                </div>
+                
+                <div id="no_results" class="text-center text-muted">
+                    <p>Enter transaction details and click "Calculate Risk Score" to see results.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('fraudForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Collect form data
+    const formData = {
+        purchase_value: parseFloat(document.getElementById('purchase_value').value),
+        age: parseInt(document.getElementById('age').value),
+        hour: parseInt(document.getElementById('hour').value),
+        time_since_signup: parseFloat(document.getElementById('time_since_signup').value),
+        country: document.getElementById('country').value,
+        source: document.getElementById('source').value,
+        is_high_value: document.getElementById('is_high_value').checked ? 1 : 0,
+        is_new_user: document.getElementById('is_new_user').checked ? 1 : 0,
+        is_night: document.getElementById('is_night').checked ? 1 : 0,
+        is_ad_source: document.getElementById('is_ad_source').checked ? 1 : 0,
+        is_shared_device: document.getElementById('is_shared_device').checked ? 1 : 0,
+        is_young_user: document.getElementById('is_young_user').checked ? 1 : 0
+    };
+    
+    // Send request to backend
+    fetch('/predict', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Update results
+        document.getElementById('risk_score').textContent = data.risk_score;
+        document.getElementById('risk_level').textContent = data.risk_level;
+        document.getElementById('risk_level').className = 'risk-' + data.risk_level.toLowerCase();
+        document.getElementById('recommendation').textContent = data.recommendation;
+        
+        // Show/hide sections
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('no_results').style.display = 'none';
+        
+        // Show risk factors if any
+        if (data.factors && data.factors.length > 0) {
+            let factorsHtml = '';
+            data.factors.forEach(factor => {
+                factorsHtml += `
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>${factor.name}</span>
+                        <span class="badge bg-warning">+${factor.impact}</span>
+                    </div>
+                `;
+            });
+            document.getElementById('risk_factors').innerHTML = factorsHtml;
+            document.getElementById('factors_section').style.display = 'block';
+        } else {
+            document.getElementById('factors_section').style.display = 'none';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error calculating risk score. Please try again.');
+    });
+});
+</script>
+{% endblock %}

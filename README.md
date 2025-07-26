@@ -1,195 +1,230 @@
-# Fraud Detection Project  
-## 10 Academy – AI Mastery Week 8 & 9 Challenge
+# Fraud Detection Project
+## 10 Academy: Artificial Intelligence Mastery Week 8&9 Challenge
 
-## Overview
+### Project Overview
 
-This project implements a robust fraud detection system for e-commerce and banking transactions using advanced machine learning techniques. It covers data preprocessing, feature engineering, model training, evaluation, and explainability using SHAP.
+This project implements a comprehensive fraud detection system for e-commerce and bank transactions using advanced machine learning techniques. The system includes data preprocessing, feature engineering, model building, evaluation, and explainability analysis using SHAP.
 
----
+### 🎯 Objectives
 
-## Objectives
+- Develop accurate fraud detection models for e-commerce and bank transactions
+- Handle class imbalance using appropriate sampling techniques
+- Implement geolocation analysis and transaction pattern recognition
+- Provide model explainability using SHAP analysis
+- Balance security and user experience considerations
 
-- Build accurate fraud detection models for e-commerce and bank datasets  
-- Address class imbalance using appropriate resampling techniques  
-- Perform geolocation and behavioral transaction analysis  
-- Provide interpretable results using SHAP  
-- Optimize for both fraud detection and user experience
+### 📊 Datasets
 
----
+1. **Fraud_Data.csv**: E-commerce transaction data
+   - Features: user_id, signup_time, purchase_time, purchase_value, device_id, source, browser, sex, age, ip_address, class
+   - Challenge: Highly imbalanced dataset
 
-## Datasets
+2. **IpAddress_to_Country.csv**: IP address to country mapping
+   - Features: lower_bound_ip_address, upper_bound_ip_address, country
 
-1. **Fraud_Data.csv** – E-commerce transaction data  
-   - Features: `user_id`, `signup_time`, `purchase_time`, `purchase_value`, `device_id`, `source`, `browser`, `sex`, `age`, `ip_address`, `class`  
-   - Challenge: Highly imbalanced
+3. **creditcard.csv**: Bank transaction data (PCA-transformed features)
+   - Features: Time, V1-V28 (anonymized), Amount, Class
+   - Challenge: Extremely imbalanced dataset
 
-2. **IpAddress_to_Country.csv** – IP-to-country mapping  
-   - Features: `lower_bound_ip_address`, `upper_bound_ip_address`, `country`
+### 🏗️ Project Structure
 
-3. **creditcard.csv** – Bank transactions with PCA-transformed features  
-   - Features: `Time`, `V1`–`V28` (anonymized), `Amount`, `Class`  
-   - Challenge: Extremely imbalanced
-
----
-
-## Project Structure
-
-```
-
+\`\`\`
 fraud-detection-project/
-├── data/                         # Dataset files
-├── notebooks/                    # Development notebooks
-│   ├── 01\_data\_preprocessing\_and\_eda.py
-│   ├── 02\_model\_building\_and\_evaluation.py
-│   └── 03\_model\_explainability\_shap.py
-├── src/                          # Core modules
-│   ├── data\_preprocessing.py
-│   ├── model\_trainer.py
+├── data/                          # Data files
+│   ├── Fraud_Data.csv
+│   ├── IpAddress_to_Country.csv
+│   └── creditcard.csv
+├── notebooks/                     # Jupyter notebooks
+│   ├── 01_data_preprocessing_and_eda.py
+│   ├── 02_model_building_and_evaluation.py
+│   └── 03_model_explainability_shap.py
+├── src/                          # Source code modules
+│   ├── __init__.py
+│   ├── data_preprocessing.py
+│   ├── model_trainer.py
 │   ├── explainability.py
 │   └── utils.py
-├── models/                       # Trained models
-├── plots/                        # Visualizations
-├── results/                      # Output reports and metrics
-├── requirements.txt              # Dependencies
-├── README.md                     # Project documentation
-└── main.py                       # Main pipeline runner
+├── models/                       # Saved models
+├── plots/                        # Generated plots and visualizations
+├── results/                      # Analysis results and reports
+├── requirements.txt              # Python dependencies
+├── README.md                     # This file
+└── main.py                       # Main execution script
+\`\`\`
 
-````
+### 🚀 Getting Started
 
----
+#### Prerequisites
 
-## Getting Started
+- Python 3.8 or higher
+- pip package manager
 
-### Prerequisites
+#### Installation
 
-- Python 3.8+
-- `pip` package manager
-
-### Installation
-
-1. Clone the repo:
-```bash
+1. Clone the repository:
+\`\`\`bash
 git clone https://github.com/your-username/fraud-detection-project.git
 cd fraud-detection-project
-````
+\`\`\`
 
-2. Create and activate a virtual environment:
-
-```bash
+2. Create a virtual environment:
+\`\`\`bash
 python -m venv fraud_detection_env
 source fraud_detection_env/bin/activate  # On Windows: fraud_detection_env\Scripts\activate
-```
+\`\`\`
 
 3. Install dependencies:
-
-```bash
+\`\`\`bash
 pip install -r requirements.txt
-```
+\`\`\`
 
-4. Create folders for storing outputs (if not already present):
-
-```bash
-mkdir -p data models plots results
-```
-
----
-
-## Running the Analysis
-
-1. **Preprocessing and Exploratory Data Analysis**
-
-```bash
-python notebooks/01_data_preprocessing_and_eda.py
-```
-
-2. **Model Training and Evaluation**
-
-```bash
-python notebooks/02_model_building_and_evaluation.py
-```
-
-3. **Model Explainability (SHAP)**
-
-```bash
-python notebooks/03_model_explainability_shap.py
-```
-
-4. **Full Pipeline Execution**
-
-```bash
+4. Run the Flask application:
+\`\`\`bash
+cd app
 python main.py
-```
+\`\`\`
 
----
+5. Open your browser and navigate to:
+\`\`\`
+http://localhost:5000
+\`\`\`
 
-## Key Features
+#### Using the Web Interface
 
-### Data Preprocessing
+The Flask application provides three main pages:
 
-* Handle missing values and clean inputs
-* IP-to-country mapping
-* Feature engineering based on time, frequency, velocity
-* Analyze and visualize class imbalance
+1. **Dashboard** (`/`): Overview of fraud detection metrics and visualizations
+2. **Test Model** (`/test`): Interactive form to test the fraud detection model
+3. **Analytics** (`/analytics`): Model performance metrics and feature importance
 
-### Feature Engineering
+#### Features
 
-* Time-based: Hour of day, day of week, time since signup
-* User behavior: Transaction count, average value
-* Device patterns: Unique users per device
-* Geolocation: Risk by country
-* Risk flags: New user, high-value transaction
+- **Simple Dashboard**: Key metrics and fraud pattern visualizations
+- **Interactive Testing**: Real-time fraud risk scoring for individual transactions
+- **Model Analytics**: Feature importance and performance metrics
+- **Responsive Design**: Works on desktop and mobile devices
 
-### Model Building
+#### Running the Analysis
 
-* Logistic Regression – Interpretable baseline
-* Random Forest – Robust ensemble model
-* SMOTE – Synthetic oversampling
-* Stratified 5-fold Cross-Validation
+1. **Data Preprocessing and EDA**:
+\`\`\`bash
+python notebooks/01_data_preprocessing_and_eda.py
+\`\`\`
 
-### Evaluation Metrics
+2. **Model Building and Evaluation**:
+\`\`\`bash
+python notebooks/02_model_building_and_evaluation.py
+\`\`\`
 
-* AUC-ROC and AUC-PR
-* Precision, Recall, F1-score
-* Confusion matrix
-* Business impact estimation
+3. **Model Explainability Analysis**:
+\`\`\`bash
+python notebooks/03_model_explainability_shap.py
+\`\`\`
 
-### Model Explainability
+4. **Complete Pipeline**:
+\`\`\`bash
+python main.py
+\`\`\`
 
-* SHAP summary and force plots
-* Feature contributions globally and locally
-* Waterfall charts for individual predictions
-* Actionable insights for fraud teams
+### 📈 Key Features
 
----
+#### Data Preprocessing
+- Missing value handling and data cleaning
+- IP address to country mapping
+- Time-based feature engineering
+- Transaction frequency and velocity features
+- Class imbalance analysis
 
-## Results Summary
+#### Feature Engineering
+- **Time Features**: hour_of_day, day_of_week, time_since_signup
+- **User Features**: transaction count, total value, average value
+- **Device Features**: transaction count, unique users per device
+- **Risk Indicators**: high_value_transaction, new_user flags
+- **Geolocation**: country mapping from IP addresses
 
-* Comprehensive EDA: In-depth insights into fraud patterns
-* Extensive Feature Engineering: 15+ derived features
-* Strong Model Performance: Optimized for imbalanced data
-* Explainable Models: Transparent decisions using SHAP
-* Business-Oriented Output: Supports ROI and risk analysis
+#### Model Building
+- **Logistic Regression**: Interpretable baseline model
+- **Random Forest**: Powerful ensemble model
+- **SMOTE**: Synthetic minority oversampling for class balance
+- **Cross-validation**: 5-fold stratified cross-validation
 
----
+#### Evaluation Metrics
+- AUC-ROC (Area Under ROC Curve)
+- AUC-PR (Area Under Precision-Recall Curve)
+- Precision, Recall, F1-Score
+- Confusion Matrix analysis
+- Business impact analysis
 
-## Key Insights
+#### Model Explainability
+- **SHAP Analysis**: Feature importance and impact direction
+- **Summary Plots**: Global feature importance visualization
+- **Waterfall Plots**: Individual prediction explanations
+- **Force Plots**: Local feature contributions
+- **Business Insights**: Actionable recommendations
 
-* High-value transactions are strong fraud indicators
-* New users show higher likelihood of fraud
-* Fraud rates vary significantly by time of day
-* Behavioral anomalies suggest fraudulent behavior
-* Geographic location is a relevant risk factor
+### 📊 Results Summary
 
----
+The project delivers:
 
-## Business Recommendations
+1. **Comprehensive EDA**: Deep insights into fraud patterns
+2. **Feature Engineering**: 15+ engineered features for better detection
+3. **Model Performance**: AUC-PR scores optimized for imbalanced data
+4. **Explainability**: SHAP analysis for model transparency
+5. **Business Impact**: ROI analysis and cost-benefit evaluation
 
-1. Implement real-time alerts for high-value transactions
-2. Use additional verification for new signups
-3. Enhance monitoring during high-risk time windows
-4. Analyze user and device patterns for anomalies
-5. Use country-based filtering to mitigate risk
+### 🔍 Key Insights
 
----
-# fraud_detection
-# fraud_detection
+Based on SHAP analysis, the most important fraud indicators are:
+
+1. **High-value transactions**: Strong predictor of fraud risk
+2. **New user status**: Recent signups pose higher risk
+3. **Transaction timing**: Certain hours show elevated fraud rates
+4. **User behavior patterns**: Frequency and velocity anomalies
+5. **Geolocation**: Country-based risk patterns
+
+### 📋 Business Recommendations
+
+1. **Real-time Monitoring**: Implement alerts for high-value transactions
+2. **New User Verification**: Additional checks for recent signups
+3. **Time-based Rules**: Enhanced monitoring during high-risk hours
+4. **Behavioral Analytics**: Track user and device patterns
+5. **Geographic Filtering**: Country-based risk assessment
+
+### 🛠️ Technical Implementation
+
+#### Class Imbalance Handling
+- **SMOTE**: Synthetic minority oversampling
+- **Evaluation Focus**: AUC-PR over accuracy
+- **Cost-sensitive Learning**: Balanced class weights
+
+#### Model Selection Criteria
+- **Performance**: AUC-PR score prioritized
+- **Interpretability**: SHAP explainability
+- **Business Impact**: ROI and cost considerations
+- **Scalability**: Real-time prediction capability
+
+### 📝 Usage Examples
+
+#### Quick Start Example
+\`\`\`python
+from src.data_preprocessing import DataPreprocessor
+from src.model_trainer import ModelTrainer
+from src.explainability import ModelExplainer
+
+# Initialize components
+preprocessor = DataPreprocessor()
+trainer = ModelTrainer()
+explainer = ModelExplainer()
+
+# Load and preprocess data
+fraud_df = preprocessor.load_fraud_data('data/Fraud_Data.csv')
+fraud_df_clean = preprocessor.clean_fraud_data(fraud_df)
+
+# Train models
+X, y, features = trainer.prepare_features(fraud_df_clean)
+X_train, X_test, y_train, y_test = trainer.split_data(X, y)
+model = trainer.train_random_forest(X_train, y_train)
+
+# Explain model
+tree_explainer = explainer.create_tree_explainer(model, 'random_forest')
+shap_values, X_sample = explainer.calculate_shap_values(tree_explainer, X_test, 'random_forest')

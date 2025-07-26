@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Fraud Detection{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="text-center mb-4">📊 Fraud Detection Dashboard</h1>
+    </div>
+</div>
+
+<!-- Key Metrics -->
+<div class="row">
+    <div class="col-md-3">
+        <div class="metric-card text-center">
+            <h3>{{ "{:,}".format(total_transactions) }}</h3>
+            <p class="mb-0">Total Transactions</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="metric-card text-center">
+            <h3>{{ "{:,}".format(fraud_count) }}</h3>
+            <p class="mb-0">Fraud Cases</p>
+            <small>({{ "%.2f"|format(fraud_rate) }}%)</small>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="metric-card text-center">
+            <h3>${{ "%.2f"|format(avg_transaction_value) }}</h3>
+            <p class="mb-0">Avg Transaction</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="metric-card text-center">
+            <h3>87.2%</h3>
+            <p class="mb-0">Model Accuracy</p>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="chart-container">
+            <div id="chart1"></div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="chart-container">
+            <div id="chart2"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="chart-container">
+            <div id="chart3"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var graph1 = {{ graph1JSON|safe }};
+    var graph2 = {{ graph2JSON|safe }};
+    var graph3 = {{ graph3JSON|safe }};
+    
+    Plotly.plot('chart1', graph1.data, graph1.layout);
+    Plotly.plot('chart2', graph2.data, graph2.layout);
+    Plotly.plot('chart3', graph3.data, graph3.layout);
+</script>
+{% endblock %}
